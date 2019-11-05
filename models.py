@@ -45,14 +45,14 @@ class Game(Base):
     outcome_id = Column(Integer, ForeignKey(Outcome.id), nullable=False)
     outcome = relationship(Outcome)
     mvp_id = Column(Integer, ForeignKey(Player.id), nullable=False)
-    # mvp = relationship(Player)
+    mvp = relationship(Player, foreign_keys=mvp_id)
     lvp_id = Column(Integer, ForeignKey(Player.id), nullable=False)
-    # lvp = relationship(Player)
+    lvp = relationship(Player, foreign_keys=lvp_id)
     date = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     game_players = relationship("GamePlayer")
 
     def __repr__(self):
-        return "<Game(outcome='%s', mvp='%s', lvp='%s', date='%s')>" % (self.outcome, self.mvp_id, self.lvp_id, self.date)
+        return "<Game(outcome='%s', mvp='%s', lvp='%s', date='%s')>" % (self.outcome, self.mvp, self.lvp, self.date)
 
 class GamePlayer(Base):
     __tablename__ = "gameplayers"
