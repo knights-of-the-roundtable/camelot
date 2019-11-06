@@ -8,7 +8,6 @@ from lambda_decorators import ssm_parameter_store, json_http_resp, load_json_bod
 @cors_headers(origin="*.intuit.com")
 @json_http_resp
 @ssm_parameter_store('/prod/camelot/db-password')
-@load_json_body
 def lambda_handler(event, context):
     body = {}
     with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
