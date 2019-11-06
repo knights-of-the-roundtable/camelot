@@ -26,7 +26,6 @@ session.add(Role(name='Assassin'))
 session.add(Role(name='Minion'))
 session.add(Role(name='Merlin'))
 session.add(Role(name='Percival'))
-session.add(Role(name='Servant'))
 
 session.add(Outcome(name='Blue Wins'))
 session.add(Outcome(name='Red Wins by Missions'))
