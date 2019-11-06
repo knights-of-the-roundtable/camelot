@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
@@ -26,10 +28,10 @@ session.add(Role(name='Merlin'))
 session.add(Role(name='Percival'))
 session.add(Role(name='Servant'))
 
-session.add(Outcome(name='good_wins'))
-session.add(Outcome(name='bad_fails'))
-session.add(Outcome(name='assassin_kill'))
-session.add(Outcome(name='five_rejects'))
+session.add(Outcome(name='Blue Wins'))
+session.add(Outcome(name='Red Wins by Missions'))
+session.add(Outcome(name='Red Wins by Assassination'))
+session.add(Outcome(name='Red Wins by Rejected Votes'))
 
 session.commit()
 session.close()

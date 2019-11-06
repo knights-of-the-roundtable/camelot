@@ -31,7 +31,7 @@ class Role(Base):
 class Outcome(Base):
     __tablename__ = 'outcomes'
     id = Column(Integer, primary_key=True)
-    name = Column(String(20), nullable=False)
+    name = Column(String(30), nullable=False)
 
     def is_good(self):
         return id == 1
