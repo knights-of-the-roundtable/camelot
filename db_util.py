@@ -15,4 +15,11 @@ class db_session:
         return self.session
 
     def __exit__(self, type, value, traceback):
+        if type:
+            self.session.rollback()
+        else:
+            self.session.commit()
         self.session.close()
+
+def as_dict(model):
+       return {c.name: str(getattr(model, c.name)) for c in model.__table__.columns}
