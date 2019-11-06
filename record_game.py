@@ -1,4 +1,3 @@
-import json
 import os
 
 from models import Game, GamePlayer, Player
@@ -17,6 +16,8 @@ def lambda_handler(event, context):
 
         for player in request['players']:
             game.game_players.append(GamePlayer(player_id=player['player'], role_id=player['role']))
+            
+        session.add(game)
         session.commit()
         body['game'] = game.id
     return body

@@ -1,4 +1,3 @@
-import json
 import os
 
 from models import Player
