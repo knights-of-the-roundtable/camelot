@@ -1,4 +1,4 @@
-# camalot
+# camelot
 
 ## Getting started
 
