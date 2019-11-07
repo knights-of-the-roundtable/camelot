@@ -33,11 +33,12 @@ custom:
   deletion_policy: Delete
   # Put this here rather than in code (presigned URL TTL)
   url_default_ttl: 60
-
+  pythonRequirements:
+    dockerizePip: non-linux 
 provider:
   name: aws
   runtime: python3.6
-  region: us-east-1
+  region: us-west-2
   stage: ${opt:stage, self:custom.default_stage}
   environment:
     REGION: ${self:custom.region}
@@ -45,18 +46,14 @@ provider:
     HOST: albion.cjxjfnu7ltml.us-west-2.rds.amazonaws.com
   vpc:
     securityGroupIds:
-      # - sg-a221c6e7
-      - sg-55db3a07
+      - sg-a221c6e7
     subnetIds:
-      # - subnet-04a569ebd4d2ad04e
-      # - subnet-0c7f324b2c3d21176
-      # - subnet-0452167e39dd7a6d9
-      # - subnet-0cce522c2d914a4f0
-      - subnet-33c3c76f
-      - subnet-4d91de73
+      - subnet-04a569ebd4d2ad04e
+      - subnet-0c7f324b2c3d21176
+      - subnet-0452167e39dd7a6d9
+      - subnet-0cce522c2d914a4f0
 functions:
   list:
-    # handler: asset_sls/outcomes.asset_outcomes
     handler: get_outcomes.lambda_handler
     name: ${self:custom.stack_name}-GetOutcomes
     description: Outcomes resource
