@@ -4,17 +4,11 @@ from models import Player, Game
 from db_util import db_session, as_dict
 from lambda_decorators import ssm_parameter_store, json_http_resp, load_json_body, cors_headers
 
-def add_points(players, player, points):
-    if 'score' not in players[player]:
-        players[player]['score'] = points
-    else:
-        players[player]['score'] += points
-
 def add_point(players, player):
-    add_points(players, player, 1)
+    players[player]['score'] += 1
 
 def subtract_point(players, player):
-    add_points(players, player, -1)
+    players[player]['score'] -= 1
 
 # Order of decorators matters!
 @cors_headers(origin="*.intuit.com")
@@ -23,7 +17,8 @@ def subtract_point(players, player):
 def lambda_handler(event, context):
     body = {}
     with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
-        players = {player.id:{'id': player.id, 'name': player.full_name()} for player in session.query(Player).all()}
+        # Setup players map, and give each player a starting score of 0 in case they haven't played any games
+        players = {player.id:{'id': player.id, 'name': player.full_name(), 'score':0} for player in session.query(Player).all()}
         # Handle points from each game
         for game in session.query(Game).all():
             # Handle MVP and LVP points for this game
