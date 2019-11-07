@@ -11,5 +11,5 @@ from lambda_decorators import ssm_parameter_store, json_http_resp, load_json_bod
 def lambda_handler(event, context):
     body = {}
     with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
-        body = [as_dict(role) for role in session.query(Role).all()]
+        body = [{'id': role.id, 'name': role.name}  for role in session.query(Role).all()]
     return body
