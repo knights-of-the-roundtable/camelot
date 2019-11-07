@@ -16,4 +16,3 @@ logger.addHandler(h)
 logger.setLevel(logging.DEBUG)
 # Suppress the more verbose modules
 logging.getLogger('__main__').setLevel(logging.DEBUG)
-logging.getLogger('pynamodb').setLevel(logging.INFO)
