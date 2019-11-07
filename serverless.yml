@@ -1,0 +1,54 @@
+service: camelot-sls-service 
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+plugins:
+  - serverless-python-requirements
+
+package:
+  exclude:
+    - node_modules/**
+    - .idea/**
+    - .requirements/**
+    - env/**
+    - README.md
+    - package.json
+    - package-lock.json
+    - requirements.txt
+
+# DRY constants: define all compound/generated names in one place
+# Override args are: .. defaults:
+# --app_acroym          signed-uploader
+# --s3_bucket           self:custom.app_acronym
+# --s3_key_base         self:custom.stage
+# --region              us-east-1
+# --stage               test
+# --deletion_policy     delete
+custom:
+  app_acronym: camelot_sls 
+  default_stage: test
+  stage: ${opt:stage, self:custom.default_stage}
+  stack_name: ${self:custom.app_acronym}-${self:custom.stage}
+  region: ${opt:region, self:provider.region}
+  deletion_policy: Delete
+  # Put this here rather than in code (presigned URL TTL)
+  url_default_ttl: 60
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: us-east-1
+  environment:
+    REGION: ${self:custom.region}
+    URL_DEFAULT_TTL: ${self:custom.url_default_ttl}
+functions:
+  list:
+    handler: asset_sls/outcomes.asset_outcomes
+    name: ${self:custom.stack_name}-GetOutcomes
+    description: Outcomes resource
+    events:
+      - http:
+          path: outcomes
+          method: get
+          cors: true
+          integration: lambda
