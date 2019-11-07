@@ -23,7 +23,7 @@ def subtract_point(players, player):
 def lambda_handler(event, context):
     body = {}
     with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
-        players = {player.id:as_dict(player) for player in session.query(Player).all()}
+        players = {player.id:{'id': player.id, 'name': player.full_name()} for player in session.query(Player).all()}
         # Handle points from each game
         for game in session.query(Game).all():
             # Handle MVP and LVP points for this game
