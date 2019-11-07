@@ -24,7 +24,7 @@ class Role(Base):
     name = Column(String(10), nullable=False)
 
     def is_good(self):
-        return id > 5
+        return self.id > 5
 
     def __repr__(self):
         return self.name
@@ -35,7 +35,7 @@ class Outcome(Base):
     name = Column(String(30), nullable=False)
 
     def is_good(self):
-        return id == 1
+        return self.id == 1
 
     def __repr__(self):
         return self.name
