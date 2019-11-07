@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -13,6 +13,7 @@ class Player(Base):
     id = Column(Integer, primary_key=True)
     first_name = Column(String(250), nullable=False)
     last_name = Column(String(250), nullable=False)
+    __table_args__ = (UniqueConstraint(first_name, last_name, name="_first_last_uc"),)
 
     def __repr__(self):
         return "<Player(first_name='%s', last_name='%s')>" % (self.first_name, self.last_name)
@@ -24,6 +25,9 @@ class Role(Base):
 
     def is_good(self):
         return self.id > 5
+
+    def is_power(self):
+        return not (self.id == 5 or self.id == 8)
 
     def __repr__(self):
         return self.name
