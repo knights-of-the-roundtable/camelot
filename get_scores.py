@@ -19,11 +19,10 @@ def subtract_point(players, player):
 # Order of decorators matters!
 @cors_headers(origin="*.intuit.com")
 @json_http_resp
-# @ssm_parameter_store('/prod/camelot/db-password')
+@ssm_parameter_store('/prod/camelot/db-password')
 def lambda_handler(event, context):
     body = {}
-    # with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
-    with db_session('localhost', 'docker') as session:
+    with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
         players = {player.id:{'id': player.id, 'name': player.full_name()} for player in session.query(Player).all()}
         # Handle points from each game
         for game in session.query(Game).all():
