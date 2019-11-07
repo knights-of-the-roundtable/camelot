@@ -41,9 +41,22 @@ provider:
   environment:
     REGION: ${self:custom.region}
     URL_DEFAULT_TTL: ${self:custom.url_default_ttl}
+    HOST: albion.cjxjfnu7ltml.us-west-2.rds.amazonaws.com
+  vpc:
+    securityGroupIds:
+      # - sg-a221c6e7
+      - sg-55db3a07
+    subnetIds:
+      # - subnet-04a569ebd4d2ad04e
+      # - subnet-0c7f324b2c3d21176
+      # - subnet-0452167e39dd7a6d9
+      # - subnet-0cce522c2d914a4f0
+      - subnet-33c3c76f
+      - subnet-4d91de73
 functions:
   list:
-    handler: asset_sls/outcomes.asset_outcomes
+    # handler: asset_sls/outcomes.asset_outcomes
+    handler: get_outcomes.lambda_handler
     name: ${self:custom.stack_name}-GetOutcomes
     description: Outcomes resource
     events:
