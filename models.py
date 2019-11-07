@@ -15,6 +15,9 @@ class Player(Base):
     last_name = Column(String(250), nullable=False)
     __table_args__ = (UniqueConstraint(first_name, last_name, name="_first_last_uc"),)
 
+    def full_name(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
     def __repr__(self):
         return "<Player(first_name='%s', last_name='%s')>" % (self.first_name, self.last_name)
 
