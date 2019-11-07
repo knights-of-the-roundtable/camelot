@@ -22,11 +22,11 @@ package:
 # --s3_bucket           self:custom.app_acronym
 # --s3_key_base         self:custom.stage
 # --region              us-east-1
-# --stage               test
+# --stage               dev 
 # --deletion_policy     delete
 custom:
   app_acronym: camelot_sls 
-  default_stage: test
+  default_stage: dev
   stage: ${opt:stage, self:custom.default_stage}
   stack_name: ${self:custom.app_acronym}-${self:custom.stage}
   region: ${opt:region, self:provider.region}
@@ -38,6 +38,7 @@ provider:
   name: aws
   runtime: python3.6
   region: us-east-1
+  stage: ${opt:stage, self:custom.default_stage}
   environment:
     REGION: ${self:custom.region}
     URL_DEFAULT_TTL: ${self:custom.url_default_ttl}
