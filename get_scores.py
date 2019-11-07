@@ -11,7 +11,7 @@ def subtract_point(players, player):
     players[player]['score'] -= 1
 
 # Order of decorators matters!
-@cors_headers(origin="*.intuit.com")
+@cors_headers(origin="https://uxfabric-e2e.app.intuit.com")
 @json_http_resp
 @ssm_parameter_store('/prod/camelot/db-password')
 def lambda_handler(event, context):
