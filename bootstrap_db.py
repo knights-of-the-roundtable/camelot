@@ -19,13 +19,14 @@ Base.metadata.create_all(engine)
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-session.add(Role(name='Mordred'))
-session.add(Role(name='Morgana'))
-session.add(Role(name='Oberon'))
-session.add(Role(name='Assassin'))
-session.add(Role(name='Minion'))
-session.add(Role(name='Merlin'))
-session.add(Role(name='Percival'))
+session.add(Role(name='Mordred')) # 1
+session.add(Role(name='Morgana')) # 2
+session.add(Role(name='Oberon')) # 3 
+session.add(Role(name='Assassin')) # 4
+session.add(Role(name='Minion')) # 5
+session.add(Role(name='Merlin')) # 6
+session.add(Role(name='Percival')) # 7
+session.add(Role(name='Servant')) # 8
 
 session.add(Outcome(name='Blue Wins'))
 session.add(Outcome(name='Red Wins by Missions'))

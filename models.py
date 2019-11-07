@@ -26,6 +26,9 @@ class Role(Base):
     def is_good(self):
         return self.id > 5
 
+    def is_power(self):
+        return not (self.id == 5 or self.id == 8)
+
     def __repr__(self):
         return self.name
 
