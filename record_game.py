@@ -6,7 +6,7 @@ from models import Game, GamePlayer, Player, Role
 from db_util import db_session
 from lambda_decorators import ssm_parameter_store, load_json_body, cors_headers
 
-@cors_headers(origin="*")
+@cors_headers(origin="https://uxfabric-e2e.app.intuit.com")
 @ssm_parameter_store('/prod/camelot/db-password')
 @load_json_body
 def lambda_handler(event, context):
