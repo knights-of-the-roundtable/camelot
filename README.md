@@ -10,7 +10,13 @@
 
 4. `python bootstrap_db.py`
 
-## Building package
+## Building package with serverless framework
+
+1. `npm install`
+
+2. `serverless deploy --stage dev`
+
+## Building package manually (obsolete)
 
 1. `docker run --rm -v <full-path-src>:/home -w="/home" python:3.7 pip install --target ./package -r requirements.txt`
 
