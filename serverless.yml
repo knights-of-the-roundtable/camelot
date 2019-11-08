@@ -124,3 +124,11 @@ functions:
           method: post
           cors: true
           integration: lambda-proxy
+  delete_player:
+    handler: delete_player.lambda_handler
+    name: ${self:custom.stack_name}-DeletePlayer
+    description: DeletePlayer method
+  bootstrap:
+    handler: bootstrap.lambda_handler
+    name: ${self:custom.stack_name}-Bootstrap
+    description: Bootstrap method
