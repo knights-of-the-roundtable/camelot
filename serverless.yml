@@ -40,6 +40,7 @@ provider:
   runtime: python3.6
   region: us-west-2
   stage: ${opt:stage, self:custom.default_stage}
+  timeout: 25
   environment:
     REGION: ${self:custom.region}
     URL_DEFAULT_TTL: ${self:custom.url_default_ttl}
