@@ -3,6 +3,7 @@ import os
 from models import Player, Game
 from db_util import db_session, as_dict
 from lambda_decorators import ssm_parameter_store, json_http_resp, load_json_body, cors_headers
+from operator import itemgetter
 
 def add_point(players, player):
     players[player]['score'] += 1
@@ -29,4 +30,5 @@ def lambda_handler(event, context):
                 if gamePlayer.role.is_good() == game.outcome.is_good():
                     add_point(players, gamePlayer.player_id)
         body = list(players.values())
+        body.sort(key=itemgetter('score'), reverse=True)
     return body
