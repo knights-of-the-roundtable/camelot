@@ -11,6 +11,14 @@ def add_point(players, player):
 def subtract_point(players, player):
     players[player]['score'] -= 1
 
+def add_mvp(players, player):
+    add_point(players, player)
+    players[player]['mvp'] += 1
+
+def add_lvp(players, player):
+    subtract_point(players, player)
+    players[player]['lvp'] += 1
+
 def add_win(players, player):
     add_point(players, player)
     players[player]['win'] += 1
@@ -34,8 +42,8 @@ def lambda_handler(event, context):
         # Handle points from each game
         for game in session.query(Game).all():
             # Handle MVP and LVP points for this game
-            add_point(players, game.mvp_id)
-            subtract_point(players, game.lvp_id)
+            add_mvp(players, game.mvp_id)
+            add_lvp(players, game.lvp_id)
             # Handle all the winners for this game
             for gamePlayer in game.game_players:
                 if gamePlayer.role.is_good() == game.outcome.is_good():
