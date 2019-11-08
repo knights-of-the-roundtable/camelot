@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Camelot service",
   "dependencies": {
+    "serverless": "^1.57.0",
     "serverless-python-requirements": "^2.4.1"
   }
 }
