@@ -6,8 +6,14 @@ from sqlalchemy import create_engine
 
 from models import Role, Outcome, Base
 
-def bootstrap(db_host='localhost', db_password='docker'):
-    engine = create_engine('postgresql://postgres:%s@%s:5432' % (db_password, db_host))
+def bootstrap():
+    engine = create_engine(
+        'postgresql+auroradataapi://:@/tintagel',
+        connect_args={
+            'aurora_cluster_arn': 'arn:aws:rds:us-west-2:472965085233:cluster:albion-serverless',
+            'secret_arn': 'arn:aws:secretsmanager:us-west-2:472965085233:secret:prod/camelot/albion-serverless-iINkbR'
+        }
+    )
     
     # Drops all tables comment in if you want to start clean
     Base.metadata.drop_all(engine)

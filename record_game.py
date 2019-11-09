@@ -1,13 +1,11 @@
-import os
 import json
 
 from http import HTTPStatus
 from models import Game, GamePlayer, Player, Role
 from db_util import db_session
-from lambda_decorators import ssm_parameter_store, load_json_body, cors_headers
+from lambda_decorators import load_json_body, cors_headers
 
 @cors_headers(origin="https://uxfabric-e2e.app.intuit.com")
-@ssm_parameter_store('/prod/camelot/db-password')
 @load_json_body
 def lambda_handler(event, context):
     body = {}
@@ -22,7 +20,7 @@ def lambda_handler(event, context):
     if not mvp_lvp_in_game(request):
         return {'statusCode': HTTPStatus.BAD_REQUEST.value, 'body': json.dumps({'errorDescription': 'MVP and LVP must be players in the game'})}
 
-    with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
+    with db_session() as session:
         if not unique_roles(request['players'], session):
             return {'statusCode': HTTPStatus.BAD_REQUEST.value, 'body': json.dumps({'errorDescription': 'Roles assigned exceed max counts'})}
 

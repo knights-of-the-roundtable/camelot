@@ -1,8 +1,6 @@
-import os
-
 from models import Player, Game
 from db_util import db_session, as_dict
-from lambda_decorators import ssm_parameter_store, json_http_resp, load_json_body, cors_headers
+from lambda_decorators import json_http_resp, load_json_body, cors_headers
 from operator import itemgetter
 
 def add_point(players, player):
@@ -14,10 +12,9 @@ def subtract_point(players, player):
 # Order of decorators matters!
 @cors_headers(origin="https://uxfabric-e2e.app.intuit.com")
 @json_http_resp
-@ssm_parameter_store('/prod/camelot/db-password')
 def lambda_handler(event, context):
     body = {}
-    with db_session(os.environ['HOST'], context.parameters['/prod/camelot/db-password']) as session:
+    with db_session() as session:
         # Setup players map, and give each player a starting score of 0 in case they haven't played any games
         players = {player.id:{'id': player.id, 'name': player.full_name(), 'score':0} for player in session.query(Player).all()}
         # Handle points from each game
