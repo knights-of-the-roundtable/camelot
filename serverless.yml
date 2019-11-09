@@ -30,9 +30,6 @@ custom:
   stage: ${opt:stage, self:custom.default_stage}
   stack_name: ${self:custom.app_acronym}-${self:custom.stage}
   region: ${opt:region, self:provider.region}
-  deletion_policy: Delete
-  # Put this here rather than in code (presigned URL TTL)
-  url_default_ttl: 60
   pythonRequirements:
     dockerizePip: non-linux 
 provider:
@@ -43,16 +40,6 @@ provider:
   timeout: 25
   environment:
     REGION: ${self:custom.region}
-    URL_DEFAULT_TTL: ${self:custom.url_default_ttl}
-    HOST: albion.cjxjfnu7ltml.us-west-2.rds.amazonaws.com
-  vpc:
-    securityGroupIds:
-      - sg-a221c6e7
-    subnetIds:
-      - subnet-04a569ebd4d2ad04e
-      - subnet-0c7f324b2c3d21176
-      - subnet-0452167e39dd7a6d9
-      - subnet-0cce522c2d914a4f0
 functions:
   add_player:
     handler: add_player.lambda_handler
