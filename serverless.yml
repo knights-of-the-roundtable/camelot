@@ -30,6 +30,8 @@ custom:
   stage: ${opt:stage, self:custom.default_stage}
   stack_name: ${self:custom.app_acronym}-${self:custom.stage}
   region: ${opt:region, self:provider.region}
+  aurora_cluster_arn: "arn:aws:rds:${self:custom.region}:472965085233:cluster:albion-serverless"
+  secret_arn: "arn:aws:secretsmanager:${self:custom.region}:472965085233:secret:prod/camelot/albion-serverless-iINkbR"
   pythonRequirements:
     dockerizePip: non-linux 
 provider:
@@ -40,6 +42,8 @@ provider:
   timeout: 25
   environment:
     REGION: ${self:custom.region}
+    AURORA_CLUSTER_ARN: ${self:custom.aurora_cluster_arn}
+    SECRET_ARN: ${self:custom.secret_arn}
 functions:
   add_player:
     handler: add_player.lambda_handler

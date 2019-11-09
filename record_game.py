@@ -1,3 +1,4 @@
+import os
 import json
 
 from http import HTTPStatus
@@ -20,7 +21,7 @@ def lambda_handler(event, context):
     if not mvp_lvp_in_game(request):
         return {'statusCode': HTTPStatus.BAD_REQUEST.value, 'body': json.dumps({'errorDescription': 'MVP and LVP must be players in the game'})}
 
-    with db_session() as session:
+    with db_session(os.environ['AURORA_CLUSTER_ARN'], os.environ['SECRET_ARN']) as session:
         if not unique_roles(request['players'], session):
             return {'statusCode': HTTPStatus.BAD_REQUEST.value, 'body': json.dumps({'errorDescription': 'Roles assigned exceed max counts'})}
 

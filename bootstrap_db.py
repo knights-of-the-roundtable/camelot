@@ -4,12 +4,12 @@ from sqlalchemy import create_engine
 
 from models import Role, Outcome, Base
 
-def bootstrap():
+def bootstrap(aurora_cluster_arn, secret_arn):
     engine = create_engine(
         'postgresql+auroradataapi://:@/tintagel',
         connect_args={
-            'aurora_cluster_arn': 'arn:aws:rds:us-west-2:472965085233:cluster:albion-serverless',
-            'secret_arn': 'arn:aws:secretsmanager:us-west-2:472965085233:secret:prod/camelot/albion-serverless-iINkbR'
+            'aurora_cluster_arn': aurora_cluster_arn,
+            'secret_arn': secret_arn
         }
     )
     
