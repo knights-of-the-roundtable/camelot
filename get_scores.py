@@ -37,7 +37,8 @@ def lambda_handler(event, context):
     body = {}
     with db_session(os.environ['AURORA_CLUSTER_ARN'], os.environ['SECRET_ARN']) as session:
         # Setup players map, and give each player a starting score of 0 in case they haven't played any games
-        players = {player.id:{'id': player.id, 'name': player.full_name(), 'score':0, 'win':0, 'loss':0} for player in session.query(Player).all()}
+        players = {player.id:{'id': player.id, 'name': player.full_name(), 'score':0, 'win':0, 'loss':0, 'mvp':0, 'lvp':0} for player in session.query(Player).all()}
+        
         # Handle points from each game
         for game in session.query(Game).all():
             # Handle MVP and LVP points for this game
@@ -49,7 +50,10 @@ def lambda_handler(event, context):
                     add_win(players, gamePlayer.player_id)
                 else:
                     add_loss(players, gamePlayer.player_id)
-                update_totals(players, gamePlayer.player_id)
+        
+        # Handle player totals
+        for player in session.query(Player).all():
+            update_totals(players, player.id)
 
         body = list(players.values())
         body.sort(key=itemgetter('score'), reverse=True)
