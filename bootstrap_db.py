@@ -1,13 +1,17 @@
-import os
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
 from models import Role, Outcome, Base
 
-def bootstrap(db_host='localhost', db_password='docker'):
-    engine = create_engine('postgresql://postgres:%s@%s:5432' % (db_password, db_host))
+def bootstrap(aurora_cluster_arn, secret_arn):
+    engine = create_engine(
+        'postgresql+auroradataapi://:@/tintagel',
+        connect_args={
+            'aurora_cluster_arn': aurora_cluster_arn,
+            'secret_arn': secret_arn
+        }
+    )
     
     # Drops all tables comment in if you want to start clean
     Base.metadata.drop_all(engine)

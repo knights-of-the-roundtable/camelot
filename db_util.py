@@ -3,12 +3,18 @@ from sqlalchemy.orm import sessionmaker
 from models import Base
 
 class db_session:
-    def __init__(self, host, password):
-        self.host = host
-        self.password = password
+    def __init__(self, aurora_cluster_arn, secret_arn):
+        self.aurora_cluster_arn = aurora_cluster_arn
+        self.secret_arn = secret_arn
 
     def __enter__(self):
-        engine = create_engine('postgresql://postgres:%s@%s:5432' % (self.password, self.host))
+        engine = create_engine(
+            'postgresql+auroradataapi://:@/tintagel',
+            connect_args={
+                'aurora_cluster_arn': self.aurora_cluster_arn,
+                'secret_arn': self.secret_arn
+            }
+        )
         Base.metadata.bind = engine
         DBSession = sessionmaker(bind=engine)
         self.session = DBSession()
