@@ -45,9 +45,9 @@ def mvp_lvp_in_game(request):
     found_lvp = False
 
     for player in request['players']:
-        if player['player'] is mvp:
+        if player['player'] == mvp:
             found_mvp = True
-        if player['player'] is lvp:
+        if player['player'] == lvp:
             found_lvp = True
 
     return found_mvp and found_lvp

@@ -4,7 +4,6 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 
 plugins:
   - serverless-python-requirements
-
 package:
   exclude:
     - node_modules/**
@@ -21,7 +20,7 @@ package:
 # --app_acroym          signed-uploader
 # --s3_bucket           self:custom.app_acronym
 # --s3_key_base         self:custom.stage
-# --region              us-east-1
+# --region              us-west-2
 # --stage               dev 
 # --deletion_policy     delete
 custom:
