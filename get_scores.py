@@ -12,7 +12,7 @@ def subtract_point(players, player):
     players[player]['score'] -= 1
 
 # Order of decorators matters!
-@cors_headers(origin="https://uxfabric-e2e.app.intuit.com")
+@cors_headers(origin="*")
 @json_http_resp
 def lambda_handler(event, context):
     body = {}
