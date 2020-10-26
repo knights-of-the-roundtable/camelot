@@ -6,7 +6,7 @@ from models import Game, GamePlayer, Player, Role
 from db_util import db_session
 from lambda_decorators import load_json_body, cors_headers
 
-@cors_headers(origin="https://uxfabric-e2e.app.intuit.com")
+@cors_headers(origin="*")
 @load_json_body
 def lambda_handler(event, context):
     body = {}
