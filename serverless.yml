@@ -43,6 +43,8 @@ provider:
   region: us-west-2
   stage: ${opt:stage, self:custom.default_stage}
   timeout: 25
+  logs:
+    restApi: true
   environment:
     REGION: ${self:custom.region}
     AURORA_CLUSTER_ARN: ${self:custom.aurora_cluster_arn}
