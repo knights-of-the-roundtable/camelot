@@ -37,6 +37,19 @@ custom:
   apiGatewayThrottling:
     maxRequestsPerSecond: 10
     maxConcurrentRequests: 20
+  # DB parameters
+  auroraUsername: postgres
+
+resources:
+  Resources:
+    auroraDbCredentials:
+      Type: AWS::SecretsManager::Secret
+      Properties:
+        Description: 'Credentails for the Aurora DB'
+        GenerateSecretString:
+            SecretStringTemplate: '{"username": "${self:custom.auroraUsername}"}'
+            GenerateStringKey: 'password'
+
 provider:
   name: aws
   runtime: python3.6
