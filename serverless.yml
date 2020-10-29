@@ -49,6 +49,24 @@ resources:
         GenerateSecretString:
             SecretStringTemplate: '{"username": "${self:custom.auroraUsername}"}'
             GenerateStringKey: 'password'
+            ExcludeCharacters: '"@/\'
+    auroraDb:
+      Type: AWS::RDS::DBCluster
+      Properties:
+        DatabaseName: tintagel
+        DBClusterIdentifier: albion-serverless
+        DBClusterParameterGroupName: default.aurora-postgresql10
+        EnableHttpEndpoint: True
+        Engine: aurora-postgresql
+        EngineMode: serverless
+        EngineVersion: '10.7'
+        MasterUsername: ${self:custom.auroraUsername}
+        MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref auroraDbCredentials, ':SecretString:password}}' ]]
+        ScalingConfiguration:
+          AutoPause: True
+          MaxCapacity: 2
+          MinCapacity: 2
+          SecondsUntilAutoPause: 7200 # 120 minutes
 
 provider:
   name: aws
