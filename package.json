@@ -7,6 +7,7 @@
     "serverless-api-gateway-throttling": "^1.0.1"
   },
   "devDependencies": {
+    "serverless-pseudo-parameters": "^2.5.0",
     "serverless-python-requirements": "^5.0.1"
   }
 }

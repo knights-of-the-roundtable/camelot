@@ -5,6 +5,7 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 plugins:
   - serverless-python-requirements
   - serverless-api-gateway-throttling
+  - serverless-pseudo-parameters
 package:
   exclude:
     - node_modules/**
@@ -30,15 +31,15 @@ custom:
   stage: ${opt:stage, self:custom.default_stage}
   stack_name: ${self:custom.app_acronym}-${self:custom.stage}
   region: ${opt:region, self:provider.region}
-  aurora_cluster_arn: "arn:aws:rds:${self:custom.region}:472965085233:cluster:albion-serverless"
-  secret_arn: "arn:aws:secretsmanager:${self:custom.region}:472965085233:secret:prod/camelot/albion-serverless-iINkbR"
+  aurora:
+    username: postgres
+    cluster_identifier: albion-serverless
+    cluster_arn: "arn:aws:rds:#{AWS::Region}:#{AWS::AccountId}:cluster:${self:custom.aurora.cluster_identifier}" # CF doesn't expose this, so need to recreate it
   pythonRequirements:
     dockerizePip: non-linux 
   apiGatewayThrottling:
     maxRequestsPerSecond: 10
     maxConcurrentRequests: 20
-  # DB parameters
-  auroraUsername: postgres
 
 resources:
   Resources:
@@ -47,20 +48,20 @@ resources:
       Properties:
         Description: 'Credentails for the Aurora DB'
         GenerateSecretString:
-            SecretStringTemplate: '{"username": "${self:custom.auroraUsername}"}'
+            SecretStringTemplate: '{"username": "${self:custom.aurora.username}"}'
             GenerateStringKey: 'password'
             ExcludeCharacters: '"@/\'
     auroraDb:
       Type: AWS::RDS::DBCluster
       Properties:
         DatabaseName: tintagel
-        DBClusterIdentifier: albion-serverless
+        DBClusterIdentifier: ${self:custom.aurora.cluster_identifier}
         DBClusterParameterGroupName: default.aurora-postgresql10
         EnableHttpEndpoint: True
         Engine: aurora-postgresql
         EngineMode: serverless
         EngineVersion: '10.7'
-        MasterUsername: ${self:custom.auroraUsername}
+        MasterUsername: ${self:custom.aurora.username}
         MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref auroraDbCredentials, ':SecretString:password}}' ]]
         ScalingConfiguration:
           AutoPause: True
@@ -78,8 +79,8 @@ provider:
     restApi: true
   environment:
     REGION: ${self:custom.region}
-    AURORA_CLUSTER_ARN: ${self:custom.aurora_cluster_arn}
-    SECRET_ARN: ${self:custom.secret_arn}
+    AURORA_CLUSTER_ARN: ${self:custom.aurora.cluster_arn}
+    SECRET_ARN: !Ref auroraDbCredentials
 functions:
   add_player:
     handler: add_player.lambda_handler
