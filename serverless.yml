@@ -68,6 +68,27 @@ resources:
           MaxCapacity: 2
           MinCapacity: 2
           SecondsUntilAutoPause: 7200 # 120 minutes
+    lambdaRdsPolicy:
+      Type: AWS::IAM::ManagedPolicy
+      Properties:
+        Description: 'IAM Policy to give lambdas access to RDS Data API'
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'rds-data:BatchExecuteStatement'
+                - 'rds-data:BeginTransaction'
+                - 'rds-data:CommitTransaction'
+                - 'rds-data:ExecuteStatement'
+                - 'rds-data:RollbackTransaction'
+              Resource: '*' # RDS Data API does not support resource-level permissions
+              # Also need secrets manager access to read DB password
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+              Resource:
+                - !Ref auroraDbCredentials
 
 provider:
   name: aws
@@ -81,6 +102,9 @@ provider:
     REGION: ${self:custom.region}
     AURORA_CLUSTER_ARN: ${self:custom.aurora.cluster_arn}
     SECRET_ARN: !Ref auroraDbCredentials
+  iamManagedPolicies: # Give policies to all lambdas
+    - !Ref lambdaRdsPolicy
+
 functions:
   add_player:
     handler: add_player.lambda_handler
