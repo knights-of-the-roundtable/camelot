@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Camelot service",
   "dependencies": {
-    "serverless": "^1.57.0",
+    "serverless": "^3.25.1",
     "serverless-api-gateway-throttling": "^1.0.1"
   },
   "devDependencies": {
